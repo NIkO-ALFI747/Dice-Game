@@ -25,6 +25,16 @@ namespace Dice_Game.DieChoice
             return minElIndexes;
         }
 
+        private static List<int> FindMaxElIndexesOfMaxProbs(
+            List<List<double>> probs, double max, int chosenColumn
+            )
+        {
+            var maxElIndexes = new List<int>();
+            for (int i = 0; i < probs.Count; i++)
+                if ((probs[i][chosenColumn] == max) && (i != chosenColumn)) maxElIndexes.Add(i);
+            return maxElIndexes;
+        }
+
         private static List<int> FindMinElIndexesOfMaxProbs(List<List<double>> probs)
         {
             var maxLosingProbs = FindMaxLosingProbs(probs);
@@ -35,11 +45,11 @@ namespace Dice_Game.DieChoice
         {
             var maximums = new List<double>();
             for (int j = 0; j < probs.Count; j++)
-                maximums.Add(FindMaxInColumn(ref probs, j));
+                maximums.Add(FindMaxInColumn(probs, j));
             return maximums;
         }
 
-        private static double FindMaxInColumn(ref List<List<double>> probs, int j)
+        private static double FindMaxInColumn(List<List<double>> probs, int j)
         {
             var max = probs[0][j];
             for (int i = 0; i < probs.Count; i++)
@@ -47,41 +57,19 @@ namespace Dice_Game.DieChoice
             return max;
         }
 
-        private static int ChooseDie(List<List<double>> probs)
+        private static int ChooseFirstDie(List<List<double>> probs)
         {
             var minElIndexes = FindMinElIndexesOfMaxProbs(probs);
             int randDieIndex = RandomNumberGenerator.GetInt32(0, minElIndexes.Count);
             return minElIndexes[randDieIndex];
         }
 
-        public static void CheckMatrix(List<List<double>> matrix)
+        private static int ChooseSecondDie(List<List<double>> probs, int firstDieIndex)
         {
-            if (matrix == null || matrix.Count == 0)
-                throw new ArgumentNullException(nameof(matrix), "The matrix is empty or null!");
-            if (matrix.Any(row => row == null))
-                throw new ArgumentNullException(nameof(matrix), "The row of the matrix is null!");
-        }
-
-        public static void CheckIndexes(int rowIndex, int colIndex, int matrixSize)
-        {
-            if (rowIndex < 0 || rowIndex >= matrixSize)
-                throw new ArgumentOutOfRangeException(nameof(rowIndex), "Row index is out of bounds!");
-            if (colIndex < 0 || colIndex >= matrixSize)
-                throw new ArgumentOutOfRangeException(nameof(rowIndex), "Column index is out of bounds!");
-        }
-
-        public static void RemoveRowAndColumn(List<List<double>> matrix, int rowIndex, int colIndex)
-        {
-            CheckMatrix(matrix);
-            CheckIndexes(rowIndex, colIndex, matrix.Count);
-            matrix.RemoveAt(rowIndex);
-            foreach (var row in matrix)
-                row.RemoveAt(colIndex);
-        }
-
-        public static void RemoveRowAndColumn(List<List<double>> matrix, int index)
-        {
-            RemoveRowAndColumn(matrix, index, index);
+            var max = FindMaxInColumn(probs, firstDieIndex);
+            var maxElIndexes = FindMaxElIndexesOfMaxProbs(probs, max, firstDieIndex);
+            int randDieIndex = RandomNumberGenerator.GetInt32(0, maxElIndexes.Count);
+            return maxElIndexes[randDieIndex];
         }
 
         public static string[] RemoveRow(string[] arr, int index)
@@ -99,10 +87,9 @@ namespace Dice_Game.DieChoice
 
         private int MakePCsChoice(Dice.Dice dice)
         {
-            var probs = dice.GetProbs();
-            if (UsersChoice != null) RemoveRowAndColumn(probs, UsersChoice.Value);
-            var PCsDie = ChooseDie(probs);
-            if (UsersChoice != null) PCsDie = GetOriginalIndex(UsersChoice.Value, PCsDie);
+            int PCsDie;
+            if (UsersChoice != null) PCsDie = ChooseSecondDie(dice.GetProbs(), UsersChoice.Value);
+            else PCsDie = ChooseFirstDie(dice.GetProbs());
             Console.WriteLine($"I make the move and choose the {dice.DiceArr[PCsDie]} dice.");
             return PCsDie;
         }
