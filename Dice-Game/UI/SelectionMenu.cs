@@ -132,11 +132,13 @@ namespace Dice_Game.UI
             return str_options;
         }
 
-        private static SelectionPrompt<string> GetSelectionPrompt(List<string> options, string title)
+        private static SelectionPrompt<string> GetSelectionPrompt(List<string> options,
+            string title, int numOfDisplayedChoices = 10
+            )
         {
             return new SelectionPrompt<string>()
                 .Title($"[green]{title}[/]")
-                .PageSize(10)
+                .PageSize(numOfDisplayedChoices)
                 .AddChoices(options);
         }
 
@@ -154,11 +156,12 @@ namespace Dice_Game.UI
             return TrySelect(options, dice, title);
         }
 
-        public int TrySelect(List<string> options, Dice.Dice dice, string title = "Select an option:")
+        public int TrySelect(List<string> options, Dice.Dice dice,
+            string title = "Select an option:", int safeCounter = 100)
         {
             int usersRandNumber = 0;
             var selected = false;
-            for (var safeCounter = 100; !selected && safeCounter != 0; safeCounter--)
+            for (; !selected && safeCounter != 0; safeCounter--)
                 MakeChoice(options, dice, ref selected, out usersRandNumber, title);
             return usersRandNumber;
         }
@@ -194,7 +197,7 @@ namespace Dice_Game.UI
         private static void ExitOperation()
         {
             AnsiConsole.Markup("[yellow]Goodbyyye!!![/]");
-            Environment.Exit(0);
+            Environment.Exit(ExitStatusCode.OK);
         }
 
         private static void HelpOperation(Dice.Dice dice)

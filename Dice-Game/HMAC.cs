@@ -9,9 +9,9 @@ namespace Dice_Game
 
         public string? HMACHash { get; private set; }
 
-        public void CreateHMAC(string message)
+        public void CreateHMAC(string message, int keyHexStringLength = 64)
         {
-            Key = RandomNumberGenerator.GetHexString(64, true);
+            Key = RandomNumberGenerator.GetHexString(keyHexStringLength, true);
             byte[] HMAC = HMACSHA3_256.HashData(
                 Encoding.ASCII.GetBytes(Key),
                 Encoding.ASCII.GetBytes(message)

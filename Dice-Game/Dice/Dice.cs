@@ -8,9 +8,9 @@ namespace Dice_Game.Dice
 
         public List<List<byte>> ParsedDice { get; }
 
-        public Dice(string[] dice)
+        public Dice(string[] dice, uint requiredNumberOfDice)
         {
-            var diceParser = new DiceParser<byte>(byte.MinValue, byte.MaxValue, 3);
+            var diceParser = new DiceParser<byte>(byte.MinValue, byte.MaxValue, requiredNumberOfDice);
             ParsedDice = diceParser.CheckAndParseDice(dice);
             DiceArr = [.. dice];
         }

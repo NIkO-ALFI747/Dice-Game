@@ -19,12 +19,14 @@ namespace Dice_Game.UI
             return SetPanel(gameTitle);
         }
 
-        private static Panel SetPanel(FigletText gameTitle)
+        private static Panel SetPanel(FigletText gameTitle, 
+            int horizontalPadding = 1, int verticalPadding = 1
+            )
         {
             return new Panel(gameTitle)
                 .Border(BoxBorder.Double)
                 .BorderStyle(new Style(Color.Green))
-                .Padding(1, 1);
+                .Padding(horizontalPadding, verticalPadding);
         }
 
         private static FigletText SetGameTitle(string gameTitleText)

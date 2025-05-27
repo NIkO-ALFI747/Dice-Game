@@ -6,10 +6,10 @@
 
         public CNODErrorMessage ErrorMessage { get; }
 
-        public CNODException(uint errorNumberOfDice)
+        public CNODException(uint errorNumberOfDice, uint requiredNumberOfDice)
         {
             ErrorNumberOfDice = errorNumberOfDice;
-            ErrorMessage = new CNODErrorMessage(ErrorNumberOfDice);
+            ErrorMessage = new CNODErrorMessage(ErrorNumberOfDice, requiredNumberOfDice);
         }
     }
 }

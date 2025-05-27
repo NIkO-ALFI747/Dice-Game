@@ -15,3 +15,4 @@ C:\Users\Admin\source\repos\Dice-Game\Dice-Game\obj\Debug\net9.0\refint\Dice-Gam
 C:\Users\Admin\source\repos\Dice-Game\Dice-Game\obj\Debug\net9.0\Dice-Game.pdb
 C:\Users\Admin\source\repos\Dice-Game\Dice-Game\obj\Debug\net9.0\Dice-Game.genruntimeconfig.cache
 C:\Users\Admin\source\repos\Dice-Game\Dice-Game\obj\Debug\net9.0\ref\Dice-Game.dll
+C:\Users\Admin\source\repos\Dice-Game\Dice-Game\obj\Debug\net9.0\Dice-Game.sourcelink.json

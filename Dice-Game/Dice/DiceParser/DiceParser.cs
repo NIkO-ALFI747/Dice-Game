@@ -14,7 +14,7 @@ namespace Dice_Game.Dice.DiceParser
 
         private void CheckNumberOfDice(string[] dice)
         {
-            if (dice.Length < RequiredNumberOfDice) throw new CNODException((uint)dice.Length);
+            if (dice.Length < RequiredNumberOfDice) throw new CNODException((uint)dice.Length, RequiredNumberOfDice);
         }
 
         private void TryCheckNumberOfDice(string[] dice)
@@ -26,7 +26,7 @@ namespace Dice_Game.Dice.DiceParser
             catch (CNODException e)
             {
                 AnsiConsole.Markup(e.ErrorMessage.GetMarkup());
-                Environment.Exit(0);
+                Environment.Exit(ExitStatusCode.OK);
             }
         }
 
@@ -48,7 +48,7 @@ namespace Dice_Game.Dice.DiceParser
             catch (PDException<DPT> e)
             {
                 AnsiConsole.Markup(e.ErrorMessage.GetMarkup());
-                Environment.Exit(0);
+                Environment.Exit(ExitStatusCode.OK);
             }
             return parsedDie;
         }

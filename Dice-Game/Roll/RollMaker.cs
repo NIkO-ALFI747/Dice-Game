@@ -12,13 +12,13 @@
         };
 
         private static byte MakeRoll(int? choice, Roll roll, Dice.Dice dice,
-            string rollResultMessage, string rollTitle
+            string rollResultMessage, string rollTitle, int keyHexStringLength = 64
             )
         {
             if (choice == null) throw new Exception("The die choice hasn't been made!");
             var upperBound = dice.ParsedDice[choice.Value].Count - 1;
             roll.SetBounds(0, upperBound);
-            roll.Run(dice, rollTitle, $"Add your number modulo {upperBound + 1}.");
+            roll.Run(dice, rollTitle, $"Add your number modulo {upperBound + 1}.", keyHexStringLength);
             return GetRollResult(dice, choice.Value, roll.FairRandNumber, rollResultMessage);
         }
 
@@ -48,29 +48,35 @@
             else return GameResults.DRAW;
         }
 
-        private void MakeUsersTurnRoll(Dice.Dice dice, DieChoice.DieChoice dieChoice, Roll roll)
+        private void MakeUsersTurnRoll(Dice.Dice dice, DieChoice.DieChoice dieChoice,
+            Roll roll, int keyHexStringLength = 64
+            )
         {
             var usersNumber = MakeRoll(dieChoice.UsersChoice, roll, dice,
-                    "Your roll result is {0}.", "It's time for your roll.");
+                    "Your roll result is {0}.", "It's time for your roll.", keyHexStringLength);
             var PCsNumber = MakeRoll(dieChoice.PCsChoice, roll, dice,
-                "My roll result is {0}.", "It's time for my roll.");
+                "My roll result is {0}.", "It's time for my roll.", keyHexStringLength);
             Console.WriteLine(gameResultMessages[GetGameResult(PCsNumber, usersNumber)]);
         }
 
-        private void MakePCsTurnRoll(Dice.Dice dice, DieChoice.DieChoice dieChoice, Roll roll)
+        private void MakePCsTurnRoll(Dice.Dice dice, DieChoice.DieChoice dieChoice, 
+            Roll roll, int keyHexStringLength = 64
+            )
         {
             var PCsNumber = MakeRoll(dieChoice.PCsChoice, roll, dice,
-                "My roll result is {0}.", "It's time for my roll.");
+                "My roll result is {0}.", "It's time for my roll.", keyHexStringLength);
             var usersNumber = MakeRoll(dieChoice.UsersChoice, roll, dice,
-                "Your roll result is {0}.", "It's time for your roll.");
+                "Your roll result is {0}.", "It's time for your roll.", keyHexStringLength);
             Console.WriteLine(gameResultMessages[GetGameResult(PCsNumber, usersNumber)]);
         }
 
-        public void Run(bool usersTurn, Dice.Dice dice, DieChoice.DieChoice dieChoice)
+        public void Run(bool usersTurn, Dice.Dice dice, 
+            DieChoice.DieChoice dieChoice, int keyHexStringLength = 64
+            )
         {
             var roll = new Roll();
-            if (usersTurn) MakeUsersTurnRoll(dice, dieChoice, roll);
-            else MakePCsTurnRoll(dice, dieChoice, roll);
+            if (usersTurn) MakeUsersTurnRoll(dice, dieChoice, roll, keyHexStringLength);
+            else MakePCsTurnRoll(dice, dieChoice, roll, keyHexStringLength);
         }
     }
 }

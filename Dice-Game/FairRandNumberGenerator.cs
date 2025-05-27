@@ -72,10 +72,10 @@ namespace Dice_Game
             hmac.WriteKey();
         }
 
-        private static HMAC GetHMAC(int PCsRandNumber)
+        private static HMAC GetHMAC(int PCsRandNumber, int keyHexStringLength = 64)
         {
             var hmac = new HMAC();
-            hmac.CreateHMAC(PCsRandNumber.ToString());
+            hmac.CreateHMAC(PCsRandNumber.ToString(), keyHexStringLength);
             hmac.WriteHMAC();
             return hmac;
         }
@@ -86,10 +86,10 @@ namespace Dice_Game
             FairRandNumber = (UsersRandNumber + PCsRandNumber) % (UpperBound.Value + 1);
         }
 
-        public void Run(Dice.Dice dice, string selectionTitle)
+        public void Run(Dice.Dice dice, string selectionTitle, int keyHexStringLength = 64)
         {
             SetPCsRandNumber();
-            var hmac = GetHMAC(PCsRandNumber);
+            var hmac = GetHMAC(PCsRandNumber, keyHexStringLength);
             SetUsersRandNumber(dice, selectionTitle);
             WriteRandNumbers(hmac);
         }
